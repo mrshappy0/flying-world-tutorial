@@ -8,7 +8,7 @@ var Colors = {
   brown: 0x59332e,
   pink: 0xf5986e,
   brownDark: 0x23190f,
-  blue: 0x68c3c0
+  blue: 0x68c3c0,
 };
 
 // THREEJS RELATED VARIABLES
@@ -97,24 +97,27 @@ function createLights() {
 
 class AirPlane {
   constructor() {
+    // geomCockpit.vertices[4].y -= 10;
+    // geomCockpit.vertices[4].z += 20;
+    // geomCockpit.vertices[5].y -= 10;
+    // geomCockpit.vertices[5].z -= 20;
+    // geomCockpit.vertices[6].y += 30;
+    // geomCockpit.vertices[6].z += 20;
+    // geomCockpit.vertices[7].y += 30;
+    // geomCockpit.vertices[7].z -= 20;
     this.mesh = new THREE.Object3D();
-    this.mesh.name = "airPlane";
-    // Create the cabin
-    var geomCockpit = new THREE.BoxGeometry(80, 50, 50, 1, 1, 1);
+  this.mesh.name = "airPlane";
+    var geomCockpit = new THREE.BoxGeometry(60, 50, 50, 1, 1, 1);
     var matCockpit = new THREE.MeshPhongMaterial({
-      color: Colors.blue,
-      shading: THREE.FlatShading
+      color: Colors.red,
+      shading: true,
     });
-    geomCockpit.vertices[4].y -= 10;
-    geomCockpit.vertices[4].z += 20;
-    geomCockpit.vertices[5].y -= 10;
-    geomCockpit.vertices[5].z -= 20;
-    geomCockpit.vertices[6].y += 30;
-    geomCockpit.vertices[6].z += 20;
-    geomCockpit.vertices[7].y += 30;
-    geomCockpit.vertices[7].z -= 20;
-
     var cockpit = new THREE.Mesh(geomCockpit, matCockpit);
+    cockpit.castShadow = true;
+    cockpit.receiveShadow = true;
+    this.mesh.add(cockpit);
+
+    var cockpit = new THREE.Mesh(matCockpit);
     cockpit.castShadow = true;
     cockpit.receiveShadow = true;
     this.mesh.add(cockpit);
@@ -122,7 +125,7 @@ class AirPlane {
     var geomEngine = new THREE.BoxGeometry(20, 50, 50, 1, 1, 1);
     var matEngine = new THREE.MeshPhongMaterial({
       color: Colors.white,
-      shading: THREE.FlatShading
+      shading: true,
     });
     var engine = new THREE.Mesh(geomEngine, matEngine);
     engine.position.x = 40;
@@ -133,7 +136,7 @@ class AirPlane {
     var geomTailPlane = new THREE.BoxGeometry(15, 20, 5, 1, 1, 1);
     var matTailPlane = new THREE.MeshPhongMaterial({
       color: Colors.red,
-      shading: THREE.FlatShading
+      // shading: THREE.FlatShading,
     });
     var tailPlane = new THREE.Mesh(geomTailPlane, matTailPlane);
     tailPlane.position.set(-35, 25, 0);
@@ -144,7 +147,7 @@ class AirPlane {
     var geomSideWing = new THREE.BoxGeometry(40, 8, 150, 1, 1, 1);
     var matSideWing = new THREE.MeshPhongMaterial({
       color: Colors.red,
-      shading: THREE.FlatShading
+      // shading: THREE.FlatShading,
     });
     geomSideWing.vertices[1].y -= 5;
     geomSideWing.vertices[1].x -= 10;
@@ -162,7 +165,7 @@ class AirPlane {
     var geomPropeller = new THREE.BoxGeometry(20, 10, 10, 1, 1, 1);
     var matPropeller = new THREE.MeshPhongMaterial({
       color: Colors.brown,
-      shading: THREE.FlatShading
+      // shading: THREE.FlatShading,
     });
     this.propeller = new THREE.Mesh(geomPropeller, matPropeller);
     this.propeller.castShadow = true;
@@ -171,7 +174,7 @@ class AirPlane {
     var geomBlade = new THREE.BoxGeometry(1, 100, 20, 1, 1, 1);
     var matBlade = new THREE.MeshPhongMaterial({
       color: Colors.brownDark,
-      shading: THREE.FlatShading
+      // shading: THREE.FlatShading,
     });
     var blade = new THREE.Mesh(geomBlade, matBlade);
     blade.position.set(8, 0, 0);
@@ -210,10 +213,10 @@ class Sea {
     var geom = new THREE.CylinderGeometry(600, 600, 800, 40, 10);
     geom.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
     var mat = new THREE.MeshPhongMaterial({
-      // color: Colors.blue,
+      color: Colors.blue,
       transparent: true,
-      opacity: 0.3,
-      shading: THREE.FlatShading
+      opacity: 0.6,
+      // shading: THREE.FlatShading,
     });
     this.mesh = new THREE.Mesh(geom, mat);
     this.mesh.receiveShadow = true;
@@ -226,7 +229,7 @@ class Cloud {
     this.mesh.name = "cloud";
     var geom = new THREE.CubeGeometry(20, 20, 20);
     var mat = new THREE.MeshPhongMaterial({
-      color: Colors.white
+      color: Colors.white,
     });
     var nBlocs = 3 + Math.floor(Math.random() * 3);
     for (var i = 0; i < nBlocs; i++) {
@@ -272,19 +275,19 @@ function createSky() {
 
 function loop() {
   updatePlane();
-    sea.mesh.rotation.z += .005;
-    sky.mesh.rotation.z += .01;
+  sea.mesh.rotation.z += 0.005;
+  sky.mesh.rotation.z += 0.01;
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
 }
 
 function updatePlane() {
-    var targetY = normalize(mousePos.y,-.75,.75,25, 175);
-    var targetX = normalize(mousePos.x,-.75,.75,-100, 100);
-    airplane.mesh.position.y = targetY;
-    airplane.mesh.position.x = targetX;
+  var targetY = normalize(mousePos.y, -0.75, 0.75, 25, 175);
+  var targetX = normalize(mousePos.x, -0.75, 0.75, -100, 100);
+  airplane.mesh.position.y = targetY;
+  airplane.mesh.position.x = targetX;
   airplane.propeller.rotation.x += 0.23;
-    airplane.propeller.rotation.x += 0.3;
+  airplane.propeller.rotation.z += 0.23;
 }
 
 function normalize(v, vmin, vmax, tmin, tmax) {
@@ -297,12 +300,12 @@ function normalize(v, vmin, vmax, tmin, tmax) {
 }
 
 function init(event) {
-    document.addEventListener('mousemove', handleMouseMove, false);
+  document.addEventListener("mousemove", handleMouseMove, false);
   createScene();
   createLights();
   createPlane();
-    createSea();
-    createSky();
+  createSea();
+  createSky();
   loop();
 }
 

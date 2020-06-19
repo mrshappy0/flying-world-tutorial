@@ -131,7 +131,7 @@ class Sea {
   constructor() {
     // create the geo of the cylinder
     // w/ params: radius top, rad bottom, height, num of segments on the radius, num vertically
-    let geom = new THREE.CylinderGeometry(600, 600, 800, 40, 10);
+    let geom = new THREE.CylinderGeometry(60, 60, 800, 1, 1);
     // rotate the geo on the x-axis
     geom.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
     // create the material
